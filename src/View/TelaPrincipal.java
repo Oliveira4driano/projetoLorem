@@ -7,6 +7,7 @@ package View;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,6 +21,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
     public TelaPrincipal() {
         initComponents();
         setLocationRelativeTo(null); 
+    }
+    
+    private void sobre() {
+        
+        JOptionPane.showMessageDialog(null, "\nDesenvolvedor: Adriano de oliveira"
+                + " \nFone:(92)99292-1431"
+                + "\n Email: oliveira.ifam@gmail.com"+
+                "\nManaus-AM 2021\n"
+              );
     }
 
     /**
@@ -70,6 +80,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenu1.setText("Menu");
 
         jMenuItem1.setText("Participantes");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setText("Projetos");
@@ -80,6 +95,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenu2.setText("Sobre");
 
         jMenuItem3.setText("Desenvolvedor");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem3);
 
         jMenuBar1.add(jMenu2);
@@ -129,6 +149,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_botaoParticipantesActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        sobre();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        try {
+            new ParticipantePesquisa().setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments

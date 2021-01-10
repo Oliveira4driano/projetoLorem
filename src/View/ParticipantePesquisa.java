@@ -8,11 +8,14 @@ package View;
 import Controle.ParticipanteDAO;
 import Model.Participante;
 import Model.ParticipanteTabelaModelo;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import util.BDException;
 
 /**
  *
@@ -37,15 +40,40 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
     public void preencherTabela(){
         tabela.setModel(new ParticipanteTabelaModelo(participantes));
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        tabela.getColumnModel().getColumn(0).setPreferredWidth(100); 
-        tabela.getColumnModel().getColumn(1).setPreferredWidth(265); 
-         tabela.getColumnModel().getColumn(2).setPreferredWidth(60); 
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(40); 
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(192); 
+         tabela.getColumnModel().getColumn(2).setPreferredWidth(195); 
     }
     public void lista() throws Exception{
         listaBD();
         preencherTabela();
         campoPesquisa.getCursor();
         
+    }
+    public void pesquisarBD() throws Exception{
+        ParticipanteDAO dao= new ParticipanteDAO();  
+        try {
+            participantes= dao.pesquisar(participante);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,"Ocorreu um erro de banco de dados: "+e.getMessage());
+        }   
+    }
+    public void preencherFiltro(){
+        participante.setNome(campoPesquisa.getText());
+    }
+    public void pesquisar() throws Exception{
+        preencherFiltro();
+        pesquisarBD();
+        preencherTabela();
+         campoPesquisa.getCursor();     
+    }
+    public void selecionarGrupo(){
+        participanteSelecionado = participantes.get(tabela.getSelectedRow());  
+        System.out.println("selecionado"+participanteSelecionado.getId());
+    }
+    public void abrirTelaPartipanteAltera() throws ParseException, BDException, ClassNotFoundException{
+        new ParticipanteAltera(participanteSelecionado).setVisible(true);
+        dispose();
     }
 
     /**
@@ -59,19 +87,24 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         campoPesquisa = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        botaoPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabela = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        botaoCadastrar = new javax.swing.JButton();
         botaoCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pesquisa Participante");
 
-        jButton1.setBackground(new java.awt.Color(38, 38, 177));
-        jButton1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jButton1.setForeground(java.awt.Color.white);
-        jButton1.setText("Pesquisar");
+        botaoPesquisar.setBackground(new java.awt.Color(38, 38, 177));
+        botaoPesquisar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        botaoPesquisar.setForeground(java.awt.Color.white);
+        botaoPesquisar.setText("Pesquisar");
+        botaoPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoPesquisarActionPerformed(evt);
+            }
+        });
 
         tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -82,15 +115,20 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
                 "Codigo", "Participante", "Função"
             }
         ));
+        tabela.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tabelaMouseReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tabela);
 
-        jButton2.setBackground(new java.awt.Color(38, 38, 177));
-        jButton2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jButton2.setForeground(java.awt.Color.white);
-        jButton2.setText("Cadastrar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        botaoCadastrar.setBackground(new java.awt.Color(38, 38, 177));
+        botaoCadastrar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        botaoCadastrar.setForeground(java.awt.Color.white);
+        botaoCadastrar.setText("Cadastrar");
+        botaoCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                botaoCadastrarActionPerformed(evt);
             }
         });
 
@@ -109,33 +147,36 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1)))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(botaoCancelar)
-                .addGap(72, 72, 72))
+                        .addGap(1, 1, 1)
+                        .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                        .addComponent(botaoPesquisar)
+                        .addGap(9, 9, 9))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(botaoCadastrar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(botaoCancelar))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(campoPesquisa)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(33, 33, 33)
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(botaoCadastrar)
                     .addComponent(botaoCancelar))
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -145,7 +186,7 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,9 +203,34 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_botaoCancelarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
         new ParticipanteCadastra().setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+        dispose();
+    }//GEN-LAST:event_botaoCadastrarActionPerformed
+
+    private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPesquisarActionPerformed
+        try {
+            pesquisar();
+        } catch (Exception ex) {
+            Logger.getLogger(ParticipantePesquisa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botaoPesquisarActionPerformed
+
+    private void tabelaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMouseReleased
+        selecionarGrupo();
+        if(evt.getClickCount() > 1){
+           participanteSelecionado =participantes.get(tabela.getSelectedRow());
+            try {
+                abrirTelaPartipanteAltera();
+            } catch (ParseException ex) {
+                Logger.getLogger(ParticipantePesquisa.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BDException ex) {
+                Logger.getLogger(ParticipantePesquisa.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ParticipantePesquisa.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_tabelaMouseReleased
 
     /**
      * @param args the command line arguments
@@ -207,10 +273,10 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botaoCadastrar;
     private javax.swing.JButton botaoCancelar;
+    private javax.swing.JButton botaoPesquisar;
     private javax.swing.JTextField campoPesquisa;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabela;

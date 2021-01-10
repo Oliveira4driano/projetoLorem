@@ -172,6 +172,11 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
+        try {
+            new ParticipantePesquisa().setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(ParticipanteCadastra.class.getName()).log(Level.SEVERE, null, ex);
+        }
         dispose();
     }//GEN-LAST:event_botaoCancelarActionPerformed
 

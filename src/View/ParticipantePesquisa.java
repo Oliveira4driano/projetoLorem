@@ -5,18 +5,47 @@
  */
 package View;
 
+import Controle.ParticipanteDAO;
+import Model.Participante;
+import Model.ParticipanteTabelaModelo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+
 /**
  *
  * @author dev
  */
 public class ParticipantePesquisa extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TelaPesquisaParticipante
-     */
-    public ParticipantePesquisa() {
+    private Participante participante = new Participante(); //Filtro
+    private List<Participante> participantes = new ArrayList<>(); //tabela 
+    private Participante participanteSelecionado;
+    
+    public ParticipantePesquisa() throws Exception {
         initComponents();
         setLocationRelativeTo(null); 
+        lista();
+    }
+    
+     private void listaBD() throws Exception {
+        ParticipanteDAO dao= new ParticipanteDAO();  
+        participantes= dao.listar();
+    }  
+    public void preencherTabela(){
+        tabela.setModel(new ParticipanteTabelaModelo(participantes));
+        tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tabela.getColumnModel().getColumn(0).setPreferredWidth(100); 
+        tabela.getColumnModel().getColumn(1).setPreferredWidth(265); 
+         tabela.getColumnModel().getColumn(2).setPreferredWidth(60); 
+    }
+    public void lista() throws Exception{
+        listaBD();
+        preencherTabela();
+        campoPesquisa.getCursor();
+        
     }
 
     /**
@@ -29,10 +58,10 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        campoPesquisa = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabela = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         botaoCancelar = new javax.swing.JButton();
 
@@ -44,7 +73,7 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
         jButton1.setForeground(java.awt.Color.white);
         jButton1.setText("Pesquisar");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null}
@@ -53,7 +82,7 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
                 "Codigo", "Participante", "Função"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tabela);
 
         jButton2.setBackground(new java.awt.Color(38, 38, 177));
         jButton2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
@@ -83,7 +112,7 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(campoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton1)))
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -98,7 +127,7 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
+                    .addComponent(campoPesquisa)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(33, 33, 33)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,18 +197,22 @@ public class ParticipantePesquisa extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ParticipantePesquisa().setVisible(true);
+                try {
+                    new ParticipantePesquisa().setVisible(true);
+                } catch (Exception ex) {
+                    Logger.getLogger(ParticipantePesquisa.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoCancelar;
+    private javax.swing.JTextField campoPesquisa;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tabela;
     // End of variables declaration//GEN-END:variables
 }

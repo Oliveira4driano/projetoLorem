@@ -5,18 +5,53 @@
  */
 package View;
 
+import Controle.ParticipanteDAO;
+import Model.Participante;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import util.BDException;
+
 /**
  *
  * @author dev
  */
 public class ParticipanteCadastra extends javax.swing.JFrame {
-
-    /**
-     * Creates new form TelaCadastraParticipante
-     */
+    
+    private Participante participante = new Participante();
+    
     public ParticipanteCadastra() {
         initComponents();
         setLocationRelativeTo(null); 
+    }
+    
+    public void preencherCampos(){
+        participante.setNome(campoNome.getText());
+        participante.setFuncao(campoFuncao.getText());
+        
+    }
+    public void limpaCampos(){
+        campoFuncao.setText("");
+        campoNome.setText("");
+    }
+    
+    private void inserirBD() throws BDException, ClassNotFoundException, SQLException{
+        ParticipanteDAO dao = new ParticipanteDAO();
+        dao.inserir(participante);
+    }
+    
+    public void salvar() throws BDException, ClassNotFoundException, SQLException{
+        if(campoNome.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "O campo Nome não pode ser vazio!"); 
+        }else if(campoFuncao.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "O campo Função não pode ser vazio!"); 
+        }else{
+            preencherCampos();
+            inserirBD();
+            limpaCampos();
+            
+        }
     }
 
     /**
@@ -30,9 +65,9 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        campoNome = new javax.swing.JTextField();
+        campoFuncao = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        campoNome1 = new javax.swing.JTextField();
+        campoNome = new javax.swing.JTextField();
         botaoCadastrar = new javax.swing.JButton();
         botaoCancelar = new javax.swing.JButton();
 
@@ -51,6 +86,11 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
         botaoCadastrar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         botaoCadastrar.setForeground(java.awt.Color.white);
         botaoCadastrar.setText("Cadastrar");
+        botaoCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botaoCadastrarActionPerformed(evt);
+            }
+        });
 
         botaoCancelar.setBackground(new java.awt.Color(38, 38, 177));
         botaoCancelar.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
@@ -69,7 +109,7 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(botaoCadastrar)
@@ -84,7 +124,7 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(22, 22, 22)
-                    .addComponent(campoNome1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(60, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
@@ -93,7 +133,7 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
                 .addGap(93, 93, 93)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(campoFuncao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botaoCadastrar)
@@ -107,7 +147,7 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(61, 61, 61)
-                    .addComponent(campoNome1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(191, Short.MAX_VALUE)))
         );
 
@@ -134,6 +174,18 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
     private void botaoCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_botaoCancelarActionPerformed
+
+    private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
+        try {
+            salvar();
+        } catch (BDException ex) {
+            Logger.getLogger(ParticipanteCadastra.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ParticipanteCadastra.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ParticipanteCadastra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botaoCadastrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -174,8 +226,8 @@ public class ParticipanteCadastra extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoCadastrar;
     private javax.swing.JButton botaoCancelar;
+    private javax.swing.JTextField campoFuncao;
     private javax.swing.JTextField campoNome;
-    private javax.swing.JTextField campoNome1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

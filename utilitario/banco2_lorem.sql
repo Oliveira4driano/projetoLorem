@@ -15,16 +15,6 @@ CREATE SCHEMA IF NOT EXISTS `bd_lorem` ;
 USE `bd_lorem` ;
 
 -- -----------------------------------------------------
--- Table `bd_lorem`.`risco`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bd_lorem`.`risco` (
-  `riscodigo` INT NOT NULL AUTO_INCREMENT,
-  `risdescricao` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`riscodigo`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `bd_lorem`.`projeto`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bd_lorem`.`projeto` (
@@ -32,16 +22,10 @@ CREATE TABLE IF NOT EXISTS `bd_lorem`.`projeto` (
   `pronome` VARCHAR(100) NOT NULL,
   `prodtinicio` VARCHAR(10) NOT NULL,
   `prodttermino` VARCHAR(10) NOT NULL,
+  `prorisco` INT NOT NULL,
   `provalor` DOUBLE NOT NULL,
-  `prostatus` VARCHAR(10) NULL,
-  `proriscodigo` INT NOT NULL,
-  PRIMARY KEY (`procodigo`, `proriscodigo`),
-  INDEX `fk_projeto_risco_idx` (`proriscodigo` ASC),
-  CONSTRAINT `fk_projeto_risco`
-    FOREIGN KEY (`proriscodigo`)
-    REFERENCES `bd_lorem`.`risco` (`riscodigo`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  `proparticipante` VARCHAR(100) NULL,
+  PRIMARY KEY (`procodigo`))
 ENGINE = InnoDB;
 
 

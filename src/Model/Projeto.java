@@ -15,14 +15,21 @@ public class Projeto {
     private String nome;
     private String dtinicio;
     private String dttermino;
-    private String status;
+    private int risco;
+    private Double valor;
+    private String participante;
+  
+    public Projeto() {
+    }
 
-    public Projeto(long id, String nome, String dtinicio, String dttermino, String status) {
+    public Projeto(long id, String nome, String dtinicio, String dttermino, int risco, Double valor, String participante) {
         this.id = id;
         this.nome = nome;
         this.dtinicio = dtinicio;
         this.dttermino = dttermino;
-        this.status = status;
+        this.risco = risco;
+        this.valor = valor;
+        this.participante = participante;
     }
 
     public long getId() {
@@ -57,14 +64,32 @@ public class Projeto {
         this.dttermino = dttermino;
     }
 
-    public String getStatus() {
-        return status;
+    public int getRisco() {
+        return risco;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRisco(int risco) {
+        this.risco = risco;
+    }
+
+    public Double getValor() {
+        return valor;
+    }
+
+    public void setValor(Double valor) {
+        this.valor = valor;
+    }
+
+    public String getParticipante() {
+        return participante;
+    }
+
+    public void setParticipante(String participante) {
+        this.participante = participante;
     }
     
     
+
+        
     
 }

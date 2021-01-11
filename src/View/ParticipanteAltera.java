@@ -221,7 +221,7 @@ public class ParticipanteAltera extends javax.swing.JFrame {
 
     private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
           int resposta=JOptionPane.showConfirmDialog(this,"Deseja realmente excluir "+participante.getNome()+"?",
-                                                 "Exclusão de Aluno",JOptionPane.YES_NO_OPTION,
+                                                 "Exclusão de Participante",JOptionPane.YES_NO_OPTION,
                                                   JOptionPane.QUESTION_MESSAGE);
         if(resposta==JOptionPane.YES_OPTION)
         try{
